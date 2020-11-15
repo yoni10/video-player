@@ -108,37 +108,37 @@ namespace VideoPlayer
         }
 
         //private string GetPinCodeEnd() {
-            string tmpPinCodeStart = "";
+        //    string tmpPinCodeStart = "";
 
-            try
-            {
-                excelApp = new Excel.Application();
-                codesWorkbook = excelApp.Workbooks.Open(System.IO.Path.Combine(Directory.GetCurrentDirectory(), codesFile), ReadOnly: true, Password: "5516");
-                worksheet = codesWorkbook.ActiveSheet;
-                excelApp.Visible = false;
-                excelApp.DisplayAlerts = false;
+        //    try
+        //    {
+        //        excelApp = new Excel.Application();
+        //        codesWorkbook = excelApp.Workbooks.Open(System.IO.Path.Combine(Directory.GetCurrentDirectory(), codesFile), ReadOnly: true, Password: "5516");
+        //        worksheet = codesWorkbook.ActiveSheet;
+        //        excelApp.Visible = false;
+        //        excelApp.DisplayAlerts = false;
 
-                for (int i = 1; i < codesCount; i++)
-                {
-                    tmpPinCodeStart = GetCellValue(worksheet, 1, i);
+        //        for (int i = 1; i < codesCount; i++)
+        //        {
+        //            tmpPinCodeStart = GetCellValue(worksheet, 1, i);
 
-                    if (tmpPinCodeStart.Equals(pinCodeStart))
-                    {
-                        pinCodeEnd = GetCellValue(worksheet, 2, i);
-                        break;
-                    }
-                }
+        //            if (tmpPinCodeStart.Equals(pinCodeStart))
+        //            {
+        //                pinCodeEnd = GetCellValue(worksheet, 2, i);
+        //                break;
+        //            }
+        //        }
 
-                codesWorkbook.Close(SaveChanges: false);
-            }
-            catch (Exception ex)
-            {
-                GenerateNewPinCode();
-            }
+        //        codesWorkbook.Close(SaveChanges: false);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        GenerateNewPinCode();
+        //    }
             
 
-            return pinCodeEnd;
-        }
+        //    return pinCodeEnd;
+        //}
 
         private string GetCellValue(Excel.Worksheet worksheet, int col, int row)
         {
