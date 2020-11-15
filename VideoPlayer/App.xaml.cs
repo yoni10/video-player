@@ -13,5 +13,9 @@ namespace VideoPlayer
     /// </summary>
     public partial class App : Application
     {
+        private void ExitApp(object sender, ExitEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
+        }
     }
 }

@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -55,6 +59,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ErrorMessageCode.xaml.cs">
+      <DependentUpon>ErrorMessageCode.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExitScreen.xaml.cs">
+      <DependentUpon>ExitScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Globals.cs" />
+    <Compile Include="PurchaseWindow.xaml.cs">
+      <DependentUpon>PurchaseWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="State.cs" />
+    <Compile Include="Styling.cs" />
+    <Page Include="ErrorMessageCode.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExitScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -67,6 +91,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PurchaseWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -86,6 +114,18 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="fonts\Assistant-Bold.ttf" />
+    <Resource Include="fonts\Assistant-ExtraBold.ttf" />
+    <Resource Include="fonts\Assistant-ExtraLight.ttf" />
+    <Resource Include="fonts\Assistant-Light.ttf" />
+    <Resource Include="fonts\Assistant-Regular.ttf" />
+    <Resource Include="fonts\Assistant-SemiBold.ttf" />
+    <Resource Include="fonts\DavidLibre-Medium.ttf" />
+    <Resource Include="fonts\SFDigitalReadout-Medium.ttf" />
+    <EmbeddedResource Include="files\codes.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -93,6 +133,42 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="files\videoCode.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="files\customerCode.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\paymentScreen.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\xButton1.png" />
+    <Resource Include="images\xButton2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\exitScreen.jpg" />
+    <Resource Include="images\noButton1.png" />
+    <Resource Include="images\noButton2.png" />
+    <Resource Include="images\yesButton1.png" />
+    <Resource Include="images\yesButton2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="files\paymentLink.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\continueButton1.png" />
+    <Resource Include="images\continueButton2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\errorMessageScreen.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,199 @@
+﻿<Window x:Class="VideoPlayer.PurchaseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VideoPlayer"
+        mc:Ignorable="d"
+        WindowStyle="None" 
+        Title="PurchaseWindow" WindowState="Maximized"
+        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+        ScrollViewer.CanContentScroll="False">
+
+    <Window.Resources>
+        <Style x:Key="Assistant-Light">
+            <Setter Property="TextElement.FontFamily" Value="fonts/Assistant-Light.ttf" />
+        </Style>
+        <Style x:Key="Assistant-SemiBold">
+            <Setter Property="TextElement.FontFamily" Value="fonts/Assistant-SemiBold.ttf" />
+        </Style>
+        <Style x:Key="Assistant-Regular">
+            <Setter Property="TextElement.FontFamily" Value="fonts/Assistant-Regular.ttf" />
+        </Style>
+        <Style x:Key="Assistant-Bold">
+            <Setter Property="TextElement.FontFamily" Value="fonts/Assistant-Bold.ttf" />
+        </Style>
+        <Style x:Key="Assistant-ExtraBold">
+            <Setter Property="TextElement.FontFamily" Value="fonts/Assistant-ExtraBold.ttf" />
+        </Style>
+        <Style x:Key="Assistant-ExtraLight">
+            <Setter Property="TextElement.FontFamily" Value="fonts/Assistant-ExtraLight.ttf" />
+        </Style>
+    </Window.Resources>
+    
+    <Grid x:Name="mainGrid" Visibility="Visible">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="7.5*" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+
+        <Grid.Background>
+            <ImageBrush ImageSource="images/paymentScreen.jpg"></ImageBrush>
+        </Grid.Background>
+
+        <Image x:Name="normalX" Source="images/xButton1.png" Visibility="Hidden"  Grid.ColumnSpan="3"/>
+        <Image x:Name="changeX" Source="images/xButton2.png" Visibility="Hidden"  Grid.ColumnSpan="3"/>
+        <Image x:Name="normal" Source="images/continueButton1.png" Visibility="Hidden"  Grid.ColumnSpan="3"/>
+        <Image x:Name="change" Source="images/continueButton2.png" Visibility="Hidden"  Grid.ColumnSpan="3"/>
+        <Image x:Name="normalX1" Source="images/xButton1.png" Visibility="Hidden" Grid.ColumnSpan="3" />
+        <Image x:Name="changeX1" Source="images/xButton2.png" Visibility="Hidden" Grid.ColumnSpan="3" />
+
+        <Grid x:Name="Header" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="0.5*"/>
+            </Grid.ColumnDefinitions>
+            <Button  x:Name="closePage"  MouseEnter="enterX" MouseLeave="leaveX" Cursor="Hand" Content="" VerticalAlignment="Center" HorizontalAlignment="Center" Width="80" Height="80"  MaxHeight="80" MaxWidth="80" FontSize="24" Click="closePageClick" Grid.Column="1" >
+                <Button.Background>
+                    <ImageBrush x:Name="XButton" ImageSource="images/xButton1.png" Stretch="Fill" />
+                </Button.Background>
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="False">
+
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <Image Source="images/xButton1.png"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <Image Source="images/xButton2.png"/>
+                                    </Setter.Value>
+                                </Setter>
+
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="Transparent"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+
+        <Grid x:Name="MainContent" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.8*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="0.8*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.4*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="0.5*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="1" Grid.Column="1" Background="Transparent" Style="{DynamicResource Assistant-ExtraBold}" FontFamily="Assistant-Bold"  FontSize="35" FlowDirection="RightToLeft"  Foreground="Black"   ><Run Text="לצורך קבלת קוד יש לבצע תשלו"/><Run Text="ם"/><Run FlowDirection="RightToLeft" Text=" ע&quot;י"/><Run Text=":"/><Run FlowDirection="RightToLeft" Text=" "/></TextBlock>
+
+            <Grid Name="Option1" Grid.Row="2" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="1" Background="Transparent" Style="{DynamicResource Assistant-Light}"  FontFamily="Assistant-Bold"  FontSize="30" FlowDirection="RightToLeft"   Foreground="Black" Text="1. תשלום באמצעות הקישור:"  RenderTransformOrigin="0.5,0.5"  ></TextBlock>
+
+                <TextBlock x:Name="payButton" Grid.Column="0" HorizontalAlignment="Right" TextDecorations="Underline" Background="Transparent" Style="{DynamicResource Assistant-Light}"  FontFamily="Assistant-Bold"  FontSize="30" FlowDirection="RightToLeft"   Foreground="DodgerBlue" Text="לחץ לתשלום" MouseLeftButtonDown="Button_Click" Cursor="Hand"></TextBlock>
+            </Grid>
+
+            <TextBlock Grid.Row="3" Grid.Column="1" Background="Transparent" Style="{DynamicResource Assistant-Light}" FontFamily="Assistant-Bold" FontSize="30" FlowDirection="RightToLeft"   Foreground="Black"   ><Run FlowDirection="RightToLeft" Text="2. "/><Run FlowDirection="RightToLeft" Text="א"/><Run Text="ו חייג לטלמסר: 02-5374559"/></TextBlock>
+
+            <TextBlock Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="1" Background="Transparent" Style="{DynamicResource Assistant-Light}"  FontFamily="Assistant-Bold" FontSize="25" FlowDirection="RightToLeft"  Foreground="Black" Text="בעת התשלום תתבקש להקיש את 5 הספרות הבאות: "/>
+
+            <!--<TextBlock x:Name="codeLabel" Grid.Row="5" Grid.Column="1" Foreground="White" Text="12345"  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="35" FontWeight="ExtraBold"  MaxWidth="351" MaxHeight="76"/>-->
+            <Grid Background="Transparent" Grid.Row="5" Grid.Column="1">
+                <local:OutlinedTextBlock Stroke="White" 
+                             ClipToBounds="False"
+                             FontSize="60" 
+                             Fill="Black"
+                             FontWeight="Bold"
+                             StrokePosition="Inside"
+                             StrokeThickness="1" Text=""
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
+                             x:Name="codeLabel">
+                </local:OutlinedTextBlock>
+            </Grid>
+
+            <TextBlock Grid.Row="6"  Grid.Column="1"  Style="{DynamicResource Assistant-Light}" FontFamily="Assistant-Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="28" FlowDirection="RightToLeft"  Foreground="Black" Text=" נא הקלד את קוד האישור"/>
+
+            <TextBox x:Name="codeTextbox" Grid.Row="7" Grid.Column="1" Background="White" TextAlignment="Center" FontWeight="DemiBold" FontSize="35" IsEnabled="True" HorizontalContentAlignment="Center" HorizontalAlignment="Center"  VerticalAlignment="Center"  TextChanged="TextBox_TextChanged" MaxLength="5"  MaxWidth="351" MaxHeight="76" Width="352" Height="60" PreviewTextInput="NumberValidationTextBox"/>
+        </Grid>
+
+        <Grid x:Name="Footer" Grid.Row="2">
+            <Button x:Name="okButton" Grid.Row="0"  HorizontalAlignment="Center" MouseEnter="enterContinue" MouseLeave="leaveContinue" IsEnabled="false" Content="" Click="okButton_Click" MaxWidth="300" MaxHeight="90" Width="300"  Grid.Column="4" Margin="37,0"   >
+                <Button.Background>
+                    <ImageBrush x:Name="imgButton2" ImageSource="images/continueButton1.png" Stretch="Fill" />
+                </Button.Background>
+                <Button.Style>
+
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="False">
+
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <Image Source="images/continueButton1.png"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <Image Source="images/continueButton2.png"/>
+                                    </Setter.Value>
+                                </Setter>
+
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="Transparent"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>
