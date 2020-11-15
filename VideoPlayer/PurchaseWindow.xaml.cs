@@ -48,13 +48,16 @@ namespace VideoPlayer
 
             try
             {
-                object randomPinCode = regKey.GetValue("randomPinCodeStart");
+                object randomPinCode = regKey.GetValue("randomPinCode");
 
                 if (randomPinCode != null)
                 {
                     State.PinCode = randomPinCode.ToString();
+                    //pinCodeStart = randomPinCode.ToString();
+                    //pinCodeEnd = GetPinCodeEnd();
                     pinCodeStart = State.PinCode.Substring(0, 5);
                     pinCodeEnd = State.PinCode.Substring(5, 5);
+
                 }                
                 else
                 {
@@ -90,7 +93,7 @@ namespace VideoPlayer
                 State.PinCode = pinCodeStart + pinCodeEnd;
                 
                 codesWorkbook.Close(SaveChanges: false);
-                regKey.SetValue("randomPinCodeStart", pinCodeStart);
+                regKey.SetValue("randomPinCode", pinCodeStart);
             }
             catch (Exception ex)
             {
@@ -102,6 +105,39 @@ namespace VideoPlayer
                 System.Diagnostics.Process.GetCurrentProcess().Kill();
                 Application.Current.Shutdown();
             }
+        }
+
+        //private string GetPinCodeEnd() {
+            string tmpPinCodeStart = "";
+
+            try
+            {
+                excelApp = new Excel.Application();
+                codesWorkbook = excelApp.Workbooks.Open(System.IO.Path.Combine(Directory.GetCurrentDirectory(), codesFile), ReadOnly: true, Password: "5516");
+                worksheet = codesWorkbook.ActiveSheet;
+                excelApp.Visible = false;
+                excelApp.DisplayAlerts = false;
+
+                for (int i = 1; i < codesCount; i++)
+                {
+                    tmpPinCodeStart = GetCellValue(worksheet, 1, i);
+
+                    if (tmpPinCodeStart.Equals(pinCodeStart))
+                    {
+                        pinCodeEnd = GetCellValue(worksheet, 2, i);
+                        break;
+                    }
+                }
+
+                codesWorkbook.Close(SaveChanges: false);
+            }
+            catch (Exception ex)
+            {
+                GenerateNewPinCode();
+            }
+            
+
+            return pinCodeEnd;
         }
 
         private string GetCellValue(Excel.Worksheet worksheet, int col, int row)
