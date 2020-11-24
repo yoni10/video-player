@@ -93,7 +93,7 @@ namespace VideoPlayer
                 State.PinCode = pinCodeStart + pinCodeEnd;
                 
                 codesWorkbook.Close(SaveChanges: false);
-                regKey.SetValue("randomPinCode", pinCodeStart);
+                regKey.SetValue("randomPinCode", State.PinCode);
             }
             catch (Exception ex)
             {
@@ -218,8 +218,8 @@ namespace VideoPlayer
                 SaveRegistryKeys();
 
                 //TODO navigate to video page
-                //ErrorMessageCode w = new ErrorMessageCode();
-                //w.Show();
+                VideoWindow w = new VideoWindow();
+                w.Show();
                 this.Close();
             }
         }

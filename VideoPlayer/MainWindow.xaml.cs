@@ -38,7 +38,7 @@ namespace VideoPlayer
             State.VideoCode = System.IO.File.ReadAllText("files/videoCode.txt");
             State.CustomerCode = System.IO.File.ReadAllText("files/customerCode.txt");
             currentRegVideoPath = Globals.PURCHASE_PATH + State.CustomerCode + "\\" + State.VideoCode + '\\';
-            //regKey = Registry.CurrentUser.OpenSubKey(currentRegVideoPath, true);
+            regKey = Registry.CurrentUser.OpenSubKey(currentRegVideoPath, true);
 
             if (NeedToPurchaseVideo())
             {
@@ -50,6 +50,9 @@ namespace VideoPlayer
             else 
             {
                 //TODO implement go to video page
+                VideoWindow vw = new VideoWindow();
+                vw.Show();
+                this.Close();
             }
         }
 
