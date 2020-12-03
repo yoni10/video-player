@@ -55,34 +55,34 @@ namespace VideoPlayer
             this.VlcControl.SourceProvider.MediaPlayer.Playing += new System.EventHandler<VlcMediaPlayerPlayingEventArgs>(SetProgresMax);
             this.VlcControl.SourceProvider.MediaPlayer.PositionChanged += new System.EventHandler<Vlc.DotNet.Core.VlcMediaPlayerPositionChangedEventArgs>(this.vlcControl1_PositionChanged);
             //media.ParseAsync();
-            
-			//this.VlcControl.SourceProvider.MediaPlayer.Play();
 
-			
-			//using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-			////using (StreamReader reader = new StreamReader(stream))
-			//{
-			//	//string result = reader.ReadToEnd();
-
-			//}
-
-			//this.VlcControl.SourceProvider.MediaPlayer.Play(t);
-
-			//vlcPlayer.SourceProvider.MediaPlayer.VlcLibDirectory =
-			////replace this path with an appropriate one
-			//new DirectoryInfo(@"c:\Program Files (x86)\VideoLAN\VLC\");
-			//vlcPlayer.MediaPlayer.EndInit();
-			//vlcPlayer.MediaPlayer.Play(new Uri("http://download.blender.org/peach/" +
-			//	"bigbuckbunny_movies/big_buck_bunny_480p_surround-fix.avi"));
+            //this.VlcControl.SourceProvider.MediaPlayer.Play();
 
 
-			//mePlayer.Source = new Uri("files/video.mp4", UriKind.Relative);
+            //using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            ////using (StreamReader reader = new StreamReader(stream))
+            //{
+            //	//string result = reader.ReadToEnd();
 
-			//DispatcherTimer timer = new DispatcherTimer();
-			//timer.Interval = TimeSpan.FromSeconds(1);
-			//timer.Tick += timer_Tick;
-			//timer.Start();
-		}
+            //}
+
+            //this.VlcControl.SourceProvider.MediaPlayer.Play(t);
+
+            //vlcPlayer.SourceProvider.MediaPlayer.VlcLibDirectory =
+            ////replace this path with an appropriate one
+            //new DirectoryInfo(@"c:\Program Files (x86)\VideoLAN\VLC\");
+            //vlcPlayer.MediaPlayer.EndInit();
+            //vlcPlayer.MediaPlayer.Play(new Uri("http://download.blender.org/peach/" +
+            //	"bigbuckbunny_movies/big_buck_bunny_480p_surround-fix.avi"));
+
+
+            //mePlayer.Source = new Uri("files/video.mp4", UriKind.Relative);
+
+            //DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(5);
+            timer.Tick += timer_Tick;
+            //timer.Start();
+        }
 
         /// <summary>
         /// function that handle the progress bar\label current actual time
@@ -135,17 +135,22 @@ namespace VideoPlayer
         private bool mediaPlayerIsPlaying = false;
         private bool progresBarMaxWasSet = false;
         private bool userIsDraggingSliderWhilePlaying = false;
+        private bool isFullScreen = false;
+        private bool isInControlPanelArea = false;
+        private bool timerForHideControlPanelWasStarted = false;
+
+        private DispatcherTimer timer = new DispatcherTimer() {
+            Interval = TimeSpan.FromSeconds(5)            
+        };
 
 
-        //private void timer_Tick(object sender, EventArgs e)
-        //{
-        //	if ((mePlayer.Source != null) && (mePlayer.NaturalDuration.HasTimeSpan) && (!userIsDraggingSlider))
-        //	{
-        //		sliProgress.Minimum = 0;
-        //		sliProgress.Maximum = mePlayer.NaturalDuration.TimeSpan.TotalSeconds;
-        //		sliProgress.Value = mePlayer.Position.TotalSeconds;
-        //	}
-        //}
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            if (isFullScreen && !isInControlPanelArea)
+            {
+                controlPanel.Visibility = Visibility.Hidden;
+            }
+        }
 
         //private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         //{
@@ -199,13 +204,13 @@ namespace VideoPlayer
 
         private void leaveControlArea(object sender, MouseEventArgs e)
         {
-            controlPanel.Visibility = Visibility.Hidden;
-
+            //controlPanel.Visibility = Visibility.Hidden;
+            isInControlPanelArea = false;
         }
         private void enterControlArea(object sender, MouseEventArgs e)
         {
-            controlPanel.Visibility = Visibility.Visible;
-
+            //controlPanel.Visibility = Visibility.Visible;
+            isInControlPanelArea = true;
         }
 
         private void Pause_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -263,13 +268,12 @@ namespace VideoPlayer
                 this.VlcControl.SourceProvider.MediaPlayer.Pause();
                 userIsDraggingSliderWhilePlaying = true;
             }
-            userIsDraggingSliderWhilePlaying = true;
         }
 
         private string GetFormatedTime(TimeSpan ts)
         {
             string format = string.Empty;
-
+            
             if (ts.Hours > 0)
                 format = @"hh\:mm\:ss";
             else
@@ -277,6 +281,20 @@ namespace VideoPlayer
 
             return ts.ToString(format);
         
+        }
+
+        private void Window_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isFullScreen)
+            {
+                controlPanel.Visibility = Visibility.Visible;
+
+                if (timerForHideControlPanelWasStarted)
+                    timer.Stop();
+
+                timer.Start();
+                timerForHideControlPanelWasStarted = true;
+            }                
         }
 
         //private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)

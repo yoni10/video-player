@@ -6,13 +6,14 @@
         xmlns:local="clr-namespace:VideoPlayer"
         xmlns:vlc="clr-namespace:Vlc.DotNet.Wpf;assembly=Vlc.DotNet.Wpf"
         mc:Ignorable="d" 
-        Title="" WindowState="Maximized" 
-        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-        WindowStyle="None"
-    AllowsTransparency="True"
-    Background="Transparent"
+        Title="" 
+        ScrollViewer.HorizontalScrollBarVisibility="Disabled"        
+        Background="Transparent"
+        MouseMove="Window_MouseMove"
         ScrollViewer.CanContentScroll="False" Foreground="#FFF8F0F0"  >
-
+    <!--WindowStyle="None"
+    WindowState="Maximized" 
+    AllowsTransparency="True"-->
     <!--<WindowChrome.WindowChrome>
         <WindowChrome  ResizeBorderThickness="5" UseAeroCaptionButtons="True" CaptionHeight="3" />
     </WindowChrome.WindowChrome>-->
@@ -88,7 +89,7 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid Background="red">
+    <Grid Background="Transparent">
         <Vlc:VlcControl xmlns:Vlc="clr-namespace:Vlc.DotNet.Wpf;assembly=Vlc.DotNet.Wpf" x:Name="VlcControl" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0.334,0.333" />
 
         <Image x:Name="imgPlay" Source="images/play1.png" Visibility="Hidden"/>
@@ -100,27 +101,27 @@
                 <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
 
-            <StackPanel Background="Transparent" Name="externalPanel" Height="100" VerticalAlignment="Bottom" MouseEnter="enterControlArea" MouseLeave="leaveControlArea" Grid.ColumnSpan="2" Grid.Row="1">
-            <StackPanel Opacity=".5" Background="Black" Height="100" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Margin="0,0,0.334,0.333" Name="controlPanel" >
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1.2*"/>
-                         <ColumnDefinition Width="0.5*"/>
-                         <ColumnDefinition Width="9*"/>
-                        <ColumnDefinition Width="0.5*"/>
-                    </Grid.ColumnDefinitions>
+            <DockPanel Background="Transparent" Name="externalPanel" Height="70" MouseEnter="enterControlArea" MouseLeave="leaveControlArea" Grid.Row="1" VerticalAlignment="Bottom">
+                <DockPanel Opacity=".5" Background="Black" Height="70"  Name="controlPanel" VerticalAlignment="Center">
+                    <Grid VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="0.8*"/>
+                                <ColumnDefinition Width="7*"/>
+                                <ColumnDefinition Width="0.8*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <Button Style="{StaticResource GlassButton}" Width="70" Height="70" Background="#FFEB2B17" Margin="7" Command="MediaCommands.Play" Name="playBtn" Grid.Column="0">
-                            <Image Source="images/play1.png" Name="imgPlayPause" />
-                        </Button>
+                            <Button Style="{StaticResource GlassButton}" Width="60" Height="60" Background="#FFEB2B17" Command="MediaCommands.Play" Name="playBtn" Grid.Column="0">
+                                <Image Source="images/play1.png" Name="imgPlayPause" />
+                            </Button>
 
 
-                        <Label Name="lblCurrentTime" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FFF7F4F4">00:00:00</Label>
+                            <Label Name="lblCurrentTime" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="#FFF7F4F4">00:00:00</Label>
 
-                        <Slider Style="{StaticResource Horizontal_Slider}" VerticalAlignment="Center" Minimum="0" Maximum="100" Value="0" Orientation="Horizontal" Height="10" Grid.Column="2" Name="pgb" Thumb.DragCompleted="pgb_DragCompleted" Thumb.DragStarted="pgb_DragStarted"></Slider>
+                            <Slider Style="{StaticResource Horizontal_Slider}" VerticalAlignment="Center" Minimum="0" Maximum="100" Value="0" Orientation="Horizontal" Height="10" Grid.Column="2" Name="pgb" Thumb.DragCompleted="pgb_DragCompleted" Thumb.DragStarted="pgb_DragStarted"></Slider>
 
-                        <Label Name="lblMaxTime" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FFF7F4F4" Margin="2">00:00:00</Label>
-                    </Grid>
+                            <Label Name="lblMaxTime" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="#FFF7F4F4" Margin="2">00:00:00</Label>
+                        </Grid>
                 
 
                 <!--<Button Style="{StaticResource GlassButton}" Width="70" Height="70" Background="red" Margin="10" Command="MediaCommands.Pause" Name="pauseBtn" Visibility="Hidden">
@@ -128,18 +129,9 @@
                 </Button>-->
                 <!--<Button Style="{StaticResource GlassButton}" Width="70" Height="70" Background="White" Margin="10" Command="MediaCommands.Stop">
                     <Image Source="images/stop.png" />
-                </Button>-->
-                <!--<Button Command="MediaCommands.Play" Background="Transparent">
-                    <Image Source="images/play1.png" />
-                </Button>
-                <Button Command="MediaCommands.Pause" Background="Transparent">
-                    <Image Source="images/pause1.png" />
-                </Button>
-                <Button Command="MediaCommands.Stop" Background="Transparent">
-                    <Image Source="images/stop.png" />
-                </Button>-->
-            </StackPanel>
-        </StackPanel>
+                </Button>-->                
+            </DockPanel>
+        </DockPanel>
         </Grid>
     </Grid>
 
