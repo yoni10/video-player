@@ -5,19 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VideoPlayer"
         xmlns:vlc="clr-namespace:Vlc.DotNet.Wpf;assembly=Vlc.DotNet.Wpf"
-        mc:Ignorable="d"
-        Title="VideoWindow" WindowState="Maximized" 
+        mc:Ignorable="d" 
+        Title="" WindowState="Maximized" 
         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-        ScrollViewer.CanContentScroll="False">
+        WindowStyle="None"
+    AllowsTransparency="True"
+    Background="Transparent"
+        ScrollViewer.CanContentScroll="False" Foreground="#FFF8F0F0"  >
 
-
-    <!--<Window.CommandBindings>
+    <!--<WindowChrome.WindowChrome>
+        <WindowChrome  ResizeBorderThickness="5" UseAeroCaptionButtons="True" CaptionHeight="3" />
+    </WindowChrome.WindowChrome>-->
+    <Window.CommandBindings>
         <CommandBinding Command="MediaCommands.Play" CanExecute="Play_CanExecute" Executed="Play_Executed" />
         <CommandBinding Command="MediaCommands.Pause" CanExecute="Pause_CanExecute" Executed="Pause_Executed" />
-        <CommandBinding Command="MediaCommands.Stop" CanExecute="Stop_CanExecute" Executed="Stop_Executed" />
-    </Window.CommandBindings>-->
-    
-    
+        <!--<CommandBinding Command="MediaCommands.Stop" CanExecute="Stop_CanExecute" Executed="Stop_Executed" />-->
+    </Window.CommandBindings>
+
+
     <!--<Grid MouseWheel="Grid_MouseWheel">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -78,37 +83,65 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="GlassButton.xaml"/>
+                <ResourceDictionary Source="SmoothSlider.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid Background="red">
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height="9*" />
-            <RowDefinition Height="1*" />
-        </Grid.RowDefinitions>-->
-        <Vlc:VlcControl xmlns:Vlc="clr-namespace:Vlc.DotNet.Wpf;assembly=Vlc.DotNet.Wpf" x:Name="VlcControl" Grid.Row="0" />
 
-        <!--<StackPanel  Orientation="Horizontal" Opacity=".5" Background="Black" Height="100" VerticalAlignment="Bottom" >
-            <Button Style="{StaticResource GlassButton}" Width="70" Height="70" Background="Blue" Margin="10" Command="MediaCommands.Play">
-                <Image Source="images/play1.png" />
-            </Button>
-            <Button Style="{StaticResource GlassButton}" Width="70" Height="70" Background="Blue" Margin="10" Command="MediaCommands.Pause">
-                <Image Source="images/pause1.png" />
-            </Button>
-            <Button Style="{StaticResource GlassButton}" Width="70" Height="70" Background="Blue" Margin="10" Command="MediaCommands.Stop">
-                <Image Source="images/stop.png" />
-            </Button>
-            --><!--<Button Command="MediaCommands.Play" Background="Transparent">
-                <Image Source="images/play1.png" />
-            </Button>-->
-            <!--<Button Command="MediaCommands.Pause" Background="Transparent">
-                <Image Source="images/pause1.png" />
-            </Button>-->
-            <!--<Button Command="MediaCommands.Stop" Background="Transparent">
-                <Image Source="images/stop.png" />
-            </Button>--><!--
-        </StackPanel>-->
+    <Grid Background="red">
+        <Vlc:VlcControl xmlns:Vlc="clr-namespace:Vlc.DotNet.Wpf;assembly=Vlc.DotNet.Wpf" x:Name="VlcControl" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0.334,0.333" />
+
+        <Image x:Name="imgPlay" Source="images/play1.png" Visibility="Hidden"/>
+        <Image x:Name="imgPause" Source="images/pause1.png" Visibility="Hidden"/>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="9*"/>
+                <RowDefinition Height="100"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Background="Transparent" Name="externalPanel" Height="100" VerticalAlignment="Bottom" MouseEnter="enterControlArea" MouseLeave="leaveControlArea" Grid.ColumnSpan="2" Grid.Row="1">
+            <StackPanel Opacity=".5" Background="Black" Height="100" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Margin="0,0,0.334,0.333" Name="controlPanel" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.2*"/>
+                         <ColumnDefinition Width="0.5*"/>
+                         <ColumnDefinition Width="9*"/>
+                        <ColumnDefinition Width="0.5*"/>
+                    </Grid.ColumnDefinitions>
+
+                        <Button Style="{StaticResource GlassButton}" Width="70" Height="70" Background="#FFEB2B17" Margin="7" Command="MediaCommands.Play" Name="playBtn" Grid.Column="0">
+                            <Image Source="images/play1.png" Name="imgPlayPause" />
+                        </Button>
+
+
+                        <Label Name="lblCurrentTime" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FFF7F4F4">00:00:00</Label>
+
+                        <Slider Style="{StaticResource Horizontal_Slider}" VerticalAlignment="Center" Minimum="0" Maximum="100" Value="0" Orientation="Horizontal" Height="10" Grid.Column="2" Name="pgb" Thumb.DragCompleted="pgb_DragCompleted" Thumb.DragStarted="pgb_DragStarted"></Slider>
+
+                        <Label Name="lblMaxTime" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#FFF7F4F4" Margin="2">00:00:00</Label>
+                    </Grid>
+                
+
+                <!--<Button Style="{StaticResource GlassButton}" Width="70" Height="70" Background="red" Margin="10" Command="MediaCommands.Pause" Name="pauseBtn" Visibility="Hidden">
+                    <Image Source="images/pause1.png" Name="imgPause" />
+                </Button>-->
+                <!--<Button Style="{StaticResource GlassButton}" Width="70" Height="70" Background="White" Margin="10" Command="MediaCommands.Stop">
+                    <Image Source="images/stop.png" />
+                </Button>-->
+                <!--<Button Command="MediaCommands.Play" Background="Transparent">
+                    <Image Source="images/play1.png" />
+                </Button>
+                <Button Command="MediaCommands.Pause" Background="Transparent">
+                    <Image Source="images/pause1.png" />
+                </Button>
+                <Button Command="MediaCommands.Stop" Background="Transparent">
+                    <Image Source="images/stop.png" />
+                </Button>-->
+            </StackPanel>
+        </StackPanel>
+        </Grid>
     </Grid>
 
-    
+
 </Window>

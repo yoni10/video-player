@@ -115,6 +115,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SmoothSlider.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="VideoWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -198,10 +202,6 @@
     <EmbeddedResource Include="files\video.mp4" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\play.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\pause.png" />
     <Resource Include="images\stop.png" />
   </ItemGroup>
   <ItemGroup>

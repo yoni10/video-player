@@ -18,6 +18,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Vlc.DotNet.Core;
+using Vlc.DotNet.Wpf;
 
 namespace VideoPlayer
 {
@@ -44,9 +46,17 @@ namespace VideoPlayer
 			var resourceName = "VideoPlayer.files.video.mp4";
 
 			Stream stream = assembly.GetManifestResourceStream(resourceName);
-			this.VlcControl.SourceProvider.MediaPlayer.SetMedia(stream);
-			
-			this.VlcControl.SourceProvider.MediaPlayer.Play();
+            this.VlcControl.SourceProvider.MediaPlayer.SetMedia(stream);
+            //this.VlcControl.SourceProvider.MediaPlayer.SetMedia(t);
+
+            //VlcMediaPlayer vlcMediaPlayer = this.VlcControl.SourceProvider.MediaPlayer;
+            //media = vlcMediaPlayer.GetMedia();
+            //media.ParsedChanged += new EventHandler<VlcMediaParsedChangedEventArgs>(Media_ParsedChanged);
+            this.VlcControl.SourceProvider.MediaPlayer.Playing += new System.EventHandler<VlcMediaPlayerPlayingEventArgs>(SetProgresMax);
+            this.VlcControl.SourceProvider.MediaPlayer.PositionChanged += new System.EventHandler<Vlc.DotNet.Core.VlcMediaPlayerPositionChangedEventArgs>(this.vlcControl1_PositionChanged);
+            //media.ParseAsync();
+            
+			//this.VlcControl.SourceProvider.MediaPlayer.Play();
 
 			
 			//using (Stream stream = assembly.GetManifestResourceStream(resourceName))
@@ -74,8 +84,57 @@ namespace VideoPlayer
 			//timer.Start();
 		}
 
+        /// <summary>
+        /// function that handle the progress bar\label current actual time
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void vlcControl1_PositionChanged(object sender, Vlc.DotNet.Core.VlcMediaPlayerPositionChangedEventArgs e)
+        {
+            var vlc = (VlcMediaPlayer)sender;
+
+            Dispatcher.Invoke(new Action(() =>
+            {
+                pgb.Value = (int)vlc.Time / 1000;
+                lblCurrentTime.Content = GetFormatedTime(TimeSpan.FromMilliseconds(vlc.Time));
+            }));
+        }
+
+        //private void Media_ParsedChanged(object sender, VlcMediaParsedChangedEventArgs e)
+        //{
+            //var vlc = (VlcMedia)sender;
+
+            //string duration = media.Duration.ToString(@"mm\:ss");
+            //string dur = $"{(media.Duration.Hours > 0 ? media.Duration.Hours.ToString() + ":" : String.Empty)}{duration}";
+            
+            //Dispatcher.Invoke(new Action(() =>
+            //{
+            //    pgb.Maximum = media.Duration.TotalSeconds;
+            //}));            
+        //}
+
+        private void SetProgresMax(object sender, VlcMediaPlayerPlayingEventArgs e)
+        {
+            var vlc = (VlcMediaPlayer)sender;
+
+            if (!progresBarMaxWasSet)
+            {
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    pgb.Maximum = (int)vlc.Length / 1000;
+                    pgb.Value = (int)vlc.Time / 1000;
+                    lblCurrentTime.Content = GetFormatedTime(TimeSpan.FromMilliseconds(vlc.Time));
+                    lblMaxTime.Content = GetFormatedTime(TimeSpan.FromMilliseconds(vlc.Length));
+                    progresBarMaxWasSet = true;
+                }));
+            }
+        }
+
+
+        //private VlcMedia media;
         private bool mediaPlayerIsPlaying = false;
-        //private bool userIsDraggingSlider = false;
+        private bool progresBarMaxWasSet = false;
+        private bool userIsDraggingSliderWhilePlaying = false;
 
 
         //private void timer_Tick(object sender, EventArgs e)
@@ -123,8 +182,29 @@ namespace VideoPlayer
             //{
             //    //File.Delete(tempFile);
             //}
-            this.VlcControl.SourceProvider.MediaPlayer.Play();
-            mediaPlayerIsPlaying = true;
+            
+            mediaPlayerIsPlaying = !mediaPlayerIsPlaying;
+
+            if (mediaPlayerIsPlaying)
+            {
+                this.VlcControl.SourceProvider.MediaPlayer.Play();                
+                imgPlayPause.Source = imgPause.Source;
+            }
+            else
+            {
+                this.VlcControl.SourceProvider.MediaPlayer.Pause();
+                imgPlayPause.Source = imgPlay.Source;
+            }
+        }
+
+        private void leaveControlArea(object sender, MouseEventArgs e)
+        {
+            controlPanel.Visibility = Visibility.Hidden;
+
+        }
+        private void enterControlArea(object sender, MouseEventArgs e)
+        {
+            controlPanel.Visibility = Visibility.Visible;
 
         }
 
@@ -135,8 +215,7 @@ namespace VideoPlayer
 
         private void Pause_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            //mePlayer.Pause();
-            this.VlcControl.SourceProvider.MediaPlayer.Pause();
+            this.VlcControl.SourceProvider.MediaPlayer.Pause();            
         }
 
         private void Stop_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -157,23 +236,48 @@ namespace VideoPlayer
             
             //mePlayer.Stop();
             mediaPlayerIsPlaying = false;
+        }        
+
+
+        /// <summary>
+        /// this function is used to enable the user to move current time forward\bacword
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void pgb_DragCompleted(object sender, DragCompletedEventArgs e)
+        {
+            VlcControl.SourceProvider.MediaPlayer.Time = (long)pgb.Value * 1000;
+
+            if (userIsDraggingSliderWhilePlaying)
+            {
+                lblCurrentTime.Content = GetFormatedTime(TimeSpan.FromMilliseconds(VlcControl.SourceProvider.MediaPlayer.Time));
+                this.VlcControl.SourceProvider.MediaPlayer.Play();
+                userIsDraggingSliderWhilePlaying = false;
+            }
         }
 
-        //private void sliProgress_DragStarted(object sender, DragStartedEventArgs e)
-        //{
-        //	userIsDraggingSlider = true;
-        //}
+        private void pgb_DragStarted(object sender, DragStartedEventArgs e)
+        {
+            if (mediaPlayerIsPlaying)
+            {
+                this.VlcControl.SourceProvider.MediaPlayer.Pause();
+                userIsDraggingSliderWhilePlaying = true;
+            }
+            userIsDraggingSliderWhilePlaying = true;
+        }
 
-        //private void sliProgress_DragCompleted(object sender, DragCompletedEventArgs e)
-        //{
-        //	userIsDraggingSlider = false;
-        //	mePlayer.Position = TimeSpan.FromSeconds(sliProgress.Value);
-        //}
+        private string GetFormatedTime(TimeSpan ts)
+        {
+            string format = string.Empty;
 
-        //private void sliProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        //{
-        //	lblProgressStatus.Text = TimeSpan.FromSeconds(sliProgress.Value).ToString(@"hh\:mm\:ss");
-        //}
+            if (ts.Hours > 0)
+                format = @"hh\:mm\:ss";
+            else
+                format = @"mm\:ss";
+
+            return ts.ToString(format);
+        
+        }
 
         //private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
         //{
