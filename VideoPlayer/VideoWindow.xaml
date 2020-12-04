@@ -114,7 +114,7 @@
                                 <ColumnDefinition Width="0.8*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Button Style="{StaticResource GlassButton}" Width="60" Height="60" Background="#FFEB2B17" Command="MediaCommands.Play" Name="playBtn" Grid.Column="0" HorizontalAlignment="Right">
+                            <Button Style="{StaticResource GlassButton}" Width="60" Height="60" Background="#FFEB2B17" Command="MediaCommands.Play" Name="playBtn" Grid.Column="0" HorizontalAlignment="Right" ToolTip="Play">
                                 <Image Source="images/play1.png" Name="imgPlayPause" />
                             </Button>
 

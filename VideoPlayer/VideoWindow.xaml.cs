@@ -56,7 +56,7 @@ namespace VideoPlayer
             this.VlcControl.SourceProvider.MediaPlayer.PositionChanged += new System.EventHandler<Vlc.DotNet.Core.VlcMediaPlayerPositionChangedEventArgs>(this.vlcControl1_PositionChanged);
             //media.ParseAsync();
 
-            this.VlcControl.SourceProvider.MediaPlayer.Play();          
+            PlayVideo();
 
 
             //using (Stream stream = assembly.GetManifestResourceStream(resourceName))
@@ -120,7 +120,7 @@ namespace VideoPlayer
 
             if (!progresBarMaxWasSet)
             {
-                this.VlcControl.SourceProvider.MediaPlayer.Pause();
+                PauseVideo();
                 Dispatcher.Invoke(new Action(() =>
                 {
                     pgb.Maximum = (int)vlc.Length / 1000;
@@ -195,16 +195,11 @@ namespace VideoPlayer
             
             mediaPlayerIsPlaying = !mediaPlayerIsPlaying;
 
-            if (mediaPlayerIsPlaying)
-            {
-                this.VlcControl.SourceProvider.MediaPlayer.Play();                
-                imgPlayPause.Source = imgPause.Source;
-            }
-            else
-            {
-                this.VlcControl.SourceProvider.MediaPlayer.Pause();
-                imgPlayPause.Source = imgPlay.Source;
-            }
+            if (mediaPlayerIsPlaying)                 
+                PlayVideo();            
+            else            
+                PauseVideo();
+            
         }
 
         private void leaveControlArea(object sender, MouseEventArgs e)
@@ -225,7 +220,7 @@ namespace VideoPlayer
 
         private void Pause_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            this.VlcControl.SourceProvider.MediaPlayer.Pause();            
+            PauseVideo();
         }
 
         private void Stop_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -261,16 +256,50 @@ namespace VideoPlayer
             if (userIsDraggingSliderWhilePlaying)
             {
                 lblCurrentTime.Content = GetFormatedTime(TimeSpan.FromMilliseconds(VlcControl.SourceProvider.MediaPlayer.Time));
-                this.VlcControl.SourceProvider.MediaPlayer.Play();
+                PlayVideo();
                 userIsDraggingSliderWhilePlaying = false;
             }
+        }
+
+        private void PlayVideo()
+        {
+            this.VlcControl.SourceProvider.MediaPlayer.Play();
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    playBtn.ToolTip = "Pause";
+                    imgPlayPause.Source = imgPause.Source;
+                }));
+                return;
+            }
+
+            playBtn.ToolTip = "Pause";
+            imgPlayPause.Source = imgPause.Source;
+        }
+
+        private void PauseVideo()
+        {
+            this.VlcControl.SourceProvider.MediaPlayer.Pause();
+
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.Invoke(new Action(() =>
+                {
+                    playBtn.ToolTip = "Play";
+                    imgPlayPause.Source = imgPlay.Source;
+                }));
+                return;
+            }
+            playBtn.ToolTip = "Play";
+            imgPlayPause.Source = imgPlay.Source;
         }
 
         private void pgb_DragStarted(object sender, DragStartedEventArgs e)
         {
             if (mediaPlayerIsPlaying)
             {
-                this.VlcControl.SourceProvider.MediaPlayer.Pause();
+                PauseVideo();
                 userIsDraggingSliderWhilePlaying = true;
             }
         }
