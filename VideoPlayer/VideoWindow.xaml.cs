@@ -56,7 +56,7 @@ namespace VideoPlayer
             this.VlcControl.SourceProvider.MediaPlayer.PositionChanged += new System.EventHandler<Vlc.DotNet.Core.VlcMediaPlayerPositionChangedEventArgs>(this.vlcControl1_PositionChanged);
             //media.ParseAsync();
 
-            //this.VlcControl.SourceProvider.MediaPlayer.Play();
+            this.VlcControl.SourceProvider.MediaPlayer.Play();          
 
 
             //using (Stream stream = assembly.GetManifestResourceStream(resourceName))
@@ -79,8 +79,9 @@ namespace VideoPlayer
             //mePlayer.Source = new Uri("files/video.mp4", UriKind.Relative);
 
             //DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(5);
+            //timer.Interval = TimeSpan.FromSeconds(5);
             timer.Tick += timer_Tick;
+            this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
             //timer.Start();
         }
 
@@ -119,6 +120,7 @@ namespace VideoPlayer
 
             if (!progresBarMaxWasSet)
             {
+                this.VlcControl.SourceProvider.MediaPlayer.Pause();
                 Dispatcher.Invoke(new Action(() =>
                 {
                     pgb.Maximum = (int)vlc.Length / 1000;
@@ -143,12 +145,15 @@ namespace VideoPlayer
             Interval = TimeSpan.FromSeconds(5)            
         };
 
+        private WindowState lastWindowState;
+
 
         private void timer_Tick(object sender, EventArgs e)
         {
             if (isFullScreen && !isInControlPanelArea)
             {
                 controlPanel.Visibility = Visibility.Hidden;
+                this.Cursor = Cursors.None; //hide the mouse cursor
             }
         }
 
@@ -288,6 +293,7 @@ namespace VideoPlayer
             if (isFullScreen)
             {
                 controlPanel.Visibility = Visibility.Visible;
+                this.Cursor = Cursors.Arrow; //dispaly the mouse cursor
 
                 if (timerForHideControlPanelWasStarted)
                     timer.Stop();
@@ -295,6 +301,52 @@ namespace VideoPlayer
                 timer.Start();
                 timerForHideControlPanelWasStarted = true;
             }                
+        }
+
+
+        private void btnFullScreen_Click(object sender, RoutedEventArgs e)
+        {
+            HandleFullScreen(e);
+        }
+
+
+        private void HandleFullScreen(EventArgs e)
+        {
+            Image img = null;
+            string title = string.Empty;
+            isFullScreen = !isFullScreen;
+
+            if (isFullScreen)
+            {
+                img = imgExitFullScreen;
+                title = "Exit full-screen mode";
+
+                lastWindowState = this.WindowState;
+                WindowState = WindowState.Normal;
+                WindowStyle = WindowStyle.None;
+                WindowState = WindowState.Maximized;
+
+                base.OnStateChanged(e);
+            }
+            else
+            {
+                img = imgFullScreen;
+                title = "View full screen";
+                this.WindowStyle = WindowStyle.SingleBorderWindow;
+                this.WindowState = lastWindowState;
+            }
+
+            btnImgFullScreen.Source = img.Source;
+            btnFullScreen.ToolTip = title;
+        }
+
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F11 || (e.Key == Key.Escape && isFullScreen))
+            {
+                HandleFullScreen(e);
+            }
+           
         }
 
         //private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)

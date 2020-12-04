@@ -7,7 +7,8 @@
         xmlns:vlc="clr-namespace:Vlc.DotNet.Wpf;assembly=Vlc.DotNet.Wpf"
         mc:Ignorable="d" 
         Title="" 
-        ScrollViewer.HorizontalScrollBarVisibility="Disabled"        
+        ScrollViewer.HorizontalScrollBarVisibility="Disabled"   
+        WindowStyle="SingleBorderWindow"
         Background="Transparent"
         MouseMove="Window_MouseMove"
         ScrollViewer.CanContentScroll="False" Foreground="#FFF8F0F0"  >
@@ -94,6 +95,8 @@
 
         <Image x:Name="imgPlay" Source="images/play1.png" Visibility="Hidden"/>
         <Image x:Name="imgPause" Source="images/pause1.png" Visibility="Hidden"/>
+        <Image x:Name="imgFullScreen" Source="images/full-screen.png" Visibility="Hidden"/>
+        <Image x:Name="imgExitFullScreen" Source="images/exit-full-screen.png" Visibility="Hidden"/>
 
         <Grid>
             <Grid.RowDefinitions>
@@ -102,16 +105,16 @@
             </Grid.RowDefinitions>
 
             <DockPanel Background="Transparent" Name="externalPanel" Height="70" MouseEnter="enterControlArea" MouseLeave="leaveControlArea" Grid.Row="1" VerticalAlignment="Bottom">
-                <DockPanel Opacity=".5" Background="Black" Height="70"  Name="controlPanel" VerticalAlignment="Center">
+                <DockPanel Opacity=".7" Background="Black" Height="70"  Name="controlPanel" VerticalAlignment="Center">
                     <Grid VerticalAlignment="Center">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
                                 <ColumnDefinition Width="0.8*"/>
+                                <ColumnDefinition Width="0.6*"/>
                                 <ColumnDefinition Width="7*"/>
                                 <ColumnDefinition Width="0.8*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Button Style="{StaticResource GlassButton}" Width="60" Height="60" Background="#FFEB2B17" Command="MediaCommands.Play" Name="playBtn" Grid.Column="0">
+                            <Button Style="{StaticResource GlassButton}" Width="60" Height="60" Background="#FFEB2B17" Command="MediaCommands.Play" Name="playBtn" Grid.Column="0" HorizontalAlignment="Right">
                                 <Image Source="images/play1.png" Name="imgPlayPause" />
                             </Button>
 
@@ -121,6 +124,10 @@
                             <Slider Style="{StaticResource Horizontal_Slider}" VerticalAlignment="Center" Minimum="0" Maximum="100" Value="0" Orientation="Horizontal" Height="10" Grid.Column="2" Name="pgb" Thumb.DragCompleted="pgb_DragCompleted" Thumb.DragStarted="pgb_DragStarted"></Slider>
 
                             <Label Name="lblMaxTime" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="#FFF7F4F4" Margin="2">00:00:00</Label>
+
+                        <Button Style="{StaticResource full_screen}" Width="20" Height="20" Grid.Column="3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10,5" Click="btnFullScreen_Click"  Name="btnFullScreen" ToolTip="View full screen">
+                                <Image Source="images/full-screen.png" Name="btnImgFullScreen"/>
+                            </Button>
                         </Grid>
                 
 
